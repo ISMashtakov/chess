@@ -1,0 +1,24 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack --config webpack.config.js && node main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.2",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.2"
+  },
+  "dependencies": {
+    "pixi.js": "^8.0.1"
+  }
+}
