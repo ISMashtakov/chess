@@ -1,14 +1,18 @@
 import { Application } from 'pixi.js';
+import loadAssets from './assets';
+import Board from './controllers/Board';
 
-// Asynchronous IIFE
 (async () =>
 {
-    // Create a PixiJS application.
+    await loadAssets();
+    
     const app = new Application();
 
-    // Intialize the application.
+    // Задний фон
     await app.init({ background: '#1099bb', resizeTo: window });
-
-    // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
+
+    // Создание доски
+    const board = new Board();
+    app.stage.addChild(board.view);
 })();
