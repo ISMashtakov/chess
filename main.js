@@ -15,5 +15,6 @@ app.get('/', (request, responce) => {
 })
 
 server.listen(80, () => {
+    // eslint-disable-next-line no-undef
     console.log("SERVER START");
 });

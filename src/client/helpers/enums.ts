@@ -1,6 +1,6 @@
-export enum FigureType {PAWN = 0};
+export enum FigureType {PAWN = 0}
 
-export enum Color {BLACK = 10, WHITE};
+export enum Color {BLACK = 10, WHITE}
 
 export function enum2str(value: FigureType | Color): string {
     switch(value){

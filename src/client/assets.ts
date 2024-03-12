@@ -19,4 +19,4 @@ export default async function loadAssets(){
             src: 'assets/figures/blackPawn.png',
         },
     ])
-};
+}
