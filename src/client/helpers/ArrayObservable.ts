@@ -9,7 +9,7 @@ export interface ObservationEvent<T>{
 }
 
 export interface ArraySubscribtion<T>{
-    obj: any;
+    obj: object;
     callback: (event: ObservationEvent<T>) => void;
 }
 
@@ -35,7 +35,11 @@ export class ObservableArray<T>{
         })
     }
 
-    public subscribe(obj: any, callback: (value: ObservationEvent<T>) => void){
+    public subscribe(obj: object, callback: (value: ObservationEvent<T>) => void){
         this.subscribers.push({obj, callback});
-    }  
+    }
+      
+    public unsubscribe(obj: object){
+        this.subscribers = this.subscribers.filter(subscriber => subscriber.obj!== obj);
+    }
 } 

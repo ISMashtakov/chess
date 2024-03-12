@@ -1,5 +1,5 @@
 export interface Subscribtion<T>{
-    obj: any;
+    obj: object;
     callback: (value: T, old: T) => void
 }
 
@@ -23,14 +23,14 @@ export class Observable<T>{
         });
     }
 
-    public subscribe(obj: any, callback: (value: T, old: T) => void, notify: boolean = true){
+    public subscribe(obj: object, callback: (value: T, old: T) => void, notify: boolean = true){
         this.subscribers.push({obj, callback});
         if(notify){
             callback(this.value, this.value);
         }
     }
 
-    public unsubscribe(obj: any){
+    public unsubscribe(obj: object){
         this.subscribers = this.subscribers.filter(subscriber => subscriber.obj!== obj);
     }
 }

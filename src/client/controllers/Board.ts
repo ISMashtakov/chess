@@ -1,7 +1,7 @@
 import GameStore from "../storages/GameStore";
 import BoardView from "../views/BoardView";
 import BaseController from "./BaseController";
-import { ObservationEventType, ObservationEvent } from '../helpers/ArrayObservable';
+import { ObservationEventType } from '../helpers/ArrayObservable';
 import FigureStore from '../storages/FigureStore';
 import Figure from "./Figure";
 import { FigureType } from "../helpers/enums";
