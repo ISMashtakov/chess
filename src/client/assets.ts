@@ -10,5 +10,13 @@ export default async function loadAssets(){
             alias: 'whiteCell',
             src: 'assets/whiteCell.png',
         },
+        {
+            alias: 'white_pawn',
+            src: 'assets/figures/whitePawn.png',
+        },
+        {
+            alias: 'black_pawn',
+            src: 'assets/figures/blackPawn.png',
+        },
     ])
 };
