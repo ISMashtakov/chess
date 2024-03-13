@@ -8,16 +8,12 @@ export default class GameStore {
     public myColor = new Observable<Color>(Color.WHITE);
     public selectedFigure = new Observable<FigureStore | null>(null);
 
-    public setSelectedFigure(figure: FigureStore | null) {
-        const current = this.selectedFigure.get();
-        if (current) {
-            current.isSelected.set(false);
-        }
-        
-        if (figure){
-            figure.isSelected.set(true);
-        }
-        
-        this.selectedFigure.set(figure);
+    constructor(){
+        this.selectedFigure.subscribe(this, this.onChangeSelectedFigure);
+    }
+
+    public onChangeSelectedFigure(current: FigureStore | null, old: FigureStore | null) {
+            old?.isSelected.set(false);
+            current?.isSelected.set(true);
     }
 }

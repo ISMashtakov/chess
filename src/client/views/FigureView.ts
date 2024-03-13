@@ -1,31 +1,37 @@
-import { Container, Sprite } from 'pixi.js';
+import { Container } from 'pixi.js';
 import FigureStore from "../storages/FigureStore";
 import BaseView from "./BaseView";
 import { enum2str } from "../helpers/enums";
 import Vector2 from "../helpers/Vector2";
-import { CELL_SIZE } from "../helpers/constants";
+import { CELL_SIZE, FIGURE_ZINDEX } from "../helpers/constants";
+import Event from '../helpers/Event';
 
 
 export default class FigureView extends BaseView<FigureStore> {
 
-    
+    public onClick = new Event();
     render(){
         const container = new Container();
-        const sprite = this.getSprite();
-        container.addChild(sprite);
+        container.zIndex = FIGURE_ZINDEX;
+
         return container
     }
 
-    getSprite(isSelected = false): Sprite {
-        const name = `${enum2str(this.store.color.get())}_${enum2str(this.store.type.get())}${isSelected? "_selected" : ""}`
-        return this.getSpriteByName(name);
+    updateSprite() {
+        this.root.removeChildren();
+        
+        const name = `${enum2str(this.store.color.get())}_${enum2str(this.store.type.get())}${this.store.isSelected.get()? "_selected" : ""}`
+        const sprite = this.getSpriteByName(name);
+        
+        this.root.addChild(sprite);
     }
 
     postrender(): void {
-        this.makeClickable();
+        this.root.eventMode = 'static';
+        this.root.onclick = () => this.onClick.send(undefined);
 
-        this.moveTo(this.store.position.get());
-        this.store.isSelected.subscribe(this, v => this.onChangeSelected(v));
+        this.store.isSelected.subscribe(this, () => this.updateSprite());
+        this.store.position.subscribe(this, e => this.moveTo(e));
     }
 
     moveTo(position: Vector2){
@@ -33,9 +39,4 @@ export default class FigureView extends BaseView<FigureStore> {
         this.y = position.y * CELL_SIZE;
     }
 
-    onChangeSelected(isSelected: boolean){
-        this.root.removeChildren();
-        this.root.addChild(this.getSprite(isSelected));
-    }
-    
 }
