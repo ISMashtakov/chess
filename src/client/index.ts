@@ -24,8 +24,10 @@ import Vector2 from './helpers/Vector2';
     app.stage.addChild(board.view.root);
 
     //Создание фигур
-    const pawn = new FigureStore(FigureType.PAWN, Color.WHITE, new Vector2(2, 2));
-    gameStore.figures.push(pawn);
-    const pawn2 = new FigureStore(FigureType.PAWN, Color.WHITE, new Vector2(2, 3));
-    gameStore.figures.push(pawn2);
+    for(let i = 0; i < 8; i++){
+        const pawn = new FigureStore(FigureType.PAWN, Color.BLACK, new Vector2(i, 1));
+        gameStore.figures.push(pawn);
+        const pawn2 = new FigureStore(FigureType.PAWN, Color.WHITE, new Vector2(i, 6));
+        gameStore.figures.push(pawn2);
+    }
 })();

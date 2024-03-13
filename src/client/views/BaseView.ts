@@ -25,10 +25,6 @@ export default abstract class BaseView<T> implements IBaseView{
         return new Sprite(Assets.get(name));
     }
 
-    protected makeClickable(): void {
-        this.root.eventMode = 'static';
-    }
-
     public set x(value: number) {
         this.root.x = value;
     }

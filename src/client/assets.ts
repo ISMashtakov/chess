@@ -11,6 +11,10 @@ export default async function loadAssets(){
             src: 'assets/whiteCell.png',
         },
         {
+            alias: 'hintCell',
+            src: 'assets/hintCell.png',
+        },
+        {
             alias: 'white_pawn',
             src: 'assets/figures/whitePawn.png',
         },

@@ -3,9 +3,11 @@ import BoardView from "../views/BoardView";
 import BaseController from "./BaseController";
 import { ObservationEventType } from '../helpers/ArrayObservable';
 import FigureStore from '../storages/FigureStore';
-import Figure from "./Figure";
+import Figure from './Figure';
+import Vector2 from "../helpers/Vector2";
+import getMoveChecker from "../helpers/FiguresMoveChecker";
 
-export default class Board extends BaseController<GameStore> {
+export default class Board extends BaseController<GameStore, BoardView> {
     figures: Array<Figure> = []
     
     constructor(store: GameStore) {
@@ -14,16 +16,59 @@ export default class Board extends BaseController<GameStore> {
         store.figures.get().forEach(this.createFigure)
 
         store.figures.subscribe(this, e => {
-            if(e.type === ObservationEventType.ADD){
-                this.createFigure(e.value)
+            switch(e.type){
+                case ObservationEventType.ADD:
+                    this.createFigure(e.value)
+                    break;
+                case ObservationEventType.REMOVE:
+                    this.removeFigure(e.value)
+                    break;
             }
-            // TODO: add REMOVE supprotion
         });
+
+        this.view.onClickToCell.subscribe(this, (args) => this.clickToCellHandler(args.pos));
+    }
+
+    clickToCellHandler(pos: Vector2){
+        const selectedFigure = this.store.selectedFigure.get();
+        if(!selectedFigure){
+            return;
+        }
+
+        this.view.drawBoard();
+
+        const moveChecker = getMoveChecker(this.store, selectedFigure);
+        const possibleMoves = moveChecker.getPossibleMoves();
+        
+        if (pos.in(possibleMoves)) {
+            if (!moveChecker.isFree(pos)){
+                const figure = moveChecker.getFigureAt(pos);
+                if(figure && !moveChecker.isMy(figure)){
+                    this.store.figures.remove(figure);
+                }
+            }
+            selectedFigure.position.set(pos);
+            this.store.selectedFigure.set(null);
+        }
+        else{
+            if (moveChecker.isFree(pos) || !moveChecker.withMy(pos)){
+                this.store.selectedFigure.set(null);
+            }
+        }
+
     }
 
     private createFigure(figureStore: FigureStore){
         const figure = new Figure(figureStore, this.store);
         this.figures.push(figure);
-        this.view.addChild(figure.view);
+        this.view.addFigure(figure.view);
+    }
+
+    private removeFigure(figureStore: FigureStore){
+        const removableFigure = this.figures.find(figure => figure.store === figureStore);
+        if(removableFigure){
+            this.figures.splice(this.figures.indexOf(removableFigure), 1);
+            this.view.removeFigure(removableFigure.view);
+        }
     }
 }
