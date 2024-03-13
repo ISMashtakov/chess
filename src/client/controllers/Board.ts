@@ -4,24 +4,16 @@ import BaseController from "./BaseController";
 import { ObservationEventType } from '../helpers/ArrayObservable';
 import FigureStore from '../storages/FigureStore';
 import Figure from "./Figure";
-import { FigureType } from "../helpers/enums";
-import Pawn from "./Pawn";
 
-const FIGURES_FACTORY : Record<FigureType, (s: FigureStore) => Figure> = {
-    [FigureType.PAWN]: (s) => new Pawn(s),
-}
-
-export default class Board extends BaseController {
-    gameStore: GameStore;
+export default class Board extends BaseController<GameStore> {
     figures: Array<Figure> = []
     
-    constructor(gameStore: GameStore) {
-        super(new BoardView(gameStore));
-        this.gameStore = gameStore;
+    constructor(store: GameStore) {
+        super(store, new BoardView(store));
 
-        gameStore.figures.get().forEach(this.createFigure)
+        store.figures.get().forEach(this.createFigure)
 
-        gameStore.figures.subscribe(this, e => {
+        store.figures.subscribe(this, e => {
             if(e.type === ObservationEventType.ADD){
                 this.createFigure(e.value)
             }
@@ -30,8 +22,7 @@ export default class Board extends BaseController {
     }
 
     private createFigure(figureStore: FigureStore){
-        const figureFactory = FIGURES_FACTORY[figureStore.type.get()];
-        const figure = figureFactory(figureStore);
+        const figure = new Figure(figureStore, this.store);
         this.figures.push(figure);
         this.view.addChild(figure.view);
     }
