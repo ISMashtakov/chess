@@ -23,13 +23,35 @@ abstract class MoveCheckerBase {
     }
 
     getFigureAt(pos: Vector2): FigureStore | undefined {
-        return this.store.figures.get().find(fig => fig.position.get() === pos);
+        return this.store.figures.get().find(fig => fig.position.get().equal(pos));
     }
 
     isFree(pos: Vector2): boolean {
         return this.getFigureAt(pos) === undefined;
     }
     abstract getPossibleMoves(): Vector2[];
+
+    getPossibleMovesForDirection(dir: Vector2): Vector2[] {
+        const possibleMoves: Vector2[] = [];
+        const pos = this.figure.position.get();
+
+        let next = pos.add(dir.x, dir.y);
+
+        while(next.isValid()) {
+            if (this.isFree(next)){
+                possibleMoves.push(next);
+            }
+            else{
+                if(!this.withMy(next)){
+                    possibleMoves.push(next);
+                }
+                break;
+            }
+            next = next.add(dir.x, dir.y);
+        }
+
+        return possibleMoves;
+    }
 }
 
 class PawnMoveChecker extends MoveCheckerBase {
@@ -56,10 +78,29 @@ class PawnMoveChecker extends MoveCheckerBase {
     }
 }
 
+class RookMoveChecker extends MoveCheckerBase {
+    public getPossibleMoves(): Vector2[] {
+        let possibleMoves: Vector2[] = [];
+
+        const directions = [new Vector2(0, 1), new Vector2(0, -1), new Vector2(1, 0), new Vector2(-1, 0)];
+        
+        directions.forEach(dir => {
+            possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(dir));
+        })
+
+        return possibleMoves;
+    }
+}
+
 
 export default function getMoveChecker(store: GameStore, figure: FigureStore): MoveCheckerBase {
     switch (figure.type.get()) {
         case FigureType.PAWN:
+            return new PawnMoveChecker(store, figure);
+        case FigureType.ROOK:
+            return new RookMoveChecker(store, figure);
+        default:
+            // TODO delete it
             return new PawnMoveChecker(store, figure);
     }
 }

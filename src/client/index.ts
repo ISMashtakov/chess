@@ -30,4 +30,17 @@ import Vector2 from './helpers/Vector2';
         const pawn2 = new FigureStore(FigureType.PAWN, Color.WHITE, new Vector2(i, 6));
         gameStore.figures.push(pawn2);
     }
+    // Ладьи
+    const rook1 = new FigureStore(FigureType.ROOK, Color.BLACK, new Vector2(0, 0));
+    gameStore.figures.push(rook1);
+
+    const rook2 = new FigureStore(FigureType.ROOK, Color.BLACK, new Vector2(7, 0));
+    gameStore.figures.push(rook2);
+
+    const rook3 = new FigureStore(FigureType.ROOK, Color.WHITE, new Vector2(0, 7));
+    gameStore.figures.push(rook3);
+
+    const rook4 = new FigureStore(FigureType.ROOK, Color.WHITE, new Vector2(7, 7));
+    gameStore.figures.push(rook4);
+
 })();
