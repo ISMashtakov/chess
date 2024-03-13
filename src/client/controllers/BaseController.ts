@@ -1,9 +1,14 @@
-import { Container } from "pixi.js";
+import BaseView from "../views/BaseView";
 
-export default class BaseController {
-    view: Container;
+export default class BaseController<K> {
+    view: BaseView<K>;
+    store: K;
 
-    constructor(view: Container) {
+    constructor(store: K, view: BaseView<K>) {
+        this.store = store;
         this.view = view;
+        this.view.root.onclick = () => this.onClick();
     }
+
+    onClick() {}
 }
