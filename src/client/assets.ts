@@ -99,5 +99,22 @@ export default async function loadAssets(){
             alias: 'black_queen_selected',
             src: 'assets/figures/blackQueenSelected.png',
         },
+        // KING
+        {
+            alias: 'white_king',
+            src: 'assets/figures/whiteKing.png',
+        },
+        {
+            alias: 'white_king_selected',
+            src: 'assets/figures/whiteKingSelected.png',
+        },
+        {
+            alias: 'black_king',
+            src: 'assets/figures/blackKing.png',
+        },
+        {
+            alias: 'black_king_selected',
+            src: 'assets/figures/blackKingSelected.png',
+        },
     ])
 }

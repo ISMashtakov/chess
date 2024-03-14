@@ -74,4 +74,11 @@ import Vector2 from './helpers/Vector2';
     const queen2 = new FigureStore(FigureType.QUEEN, Color.WHITE, new Vector2(3, 7));
     gameStore.figures.push(queen2);
 
+    // Короли
+    const king1 = new FigureStore(FigureType.KING, Color.BLACK, new Vector2(4, 0));
+    gameStore.figures.push(king1);
+
+    const king2 = new FigureStore(FigureType.KING, Color.WHITE, new Vector2(4, 7));
+    gameStore.figures.push(king2);
+
 })();
