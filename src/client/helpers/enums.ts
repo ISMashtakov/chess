@@ -1,4 +1,4 @@
-export enum FigureType {PAWN = 0, ROOK = 1, KNIGHT = 2, BISHOP = 3, KUEEN = 4, KING = 5}
+export enum FigureType {PAWN = 0, ROOK = 1, KNIGHT = 2, BISHOP = 3, QUEEN = 4, KING = 5}
 
 export enum Color {BLACK = 10, WHITE = 11}
 
@@ -12,8 +12,8 @@ export function enum2str(value: FigureType | Color): string {
             return "knight";
         case FigureType.BISHOP:
             return "bishop";
-        case FigureType.KUEEN:
-            return "kueen";
+        case FigureType.QUEEN:
+            return "queen";
         case FigureType.KING:
             return "king";
         case Color.BLACK:

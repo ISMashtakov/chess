@@ -66,4 +66,12 @@ import Vector2 from './helpers/Vector2';
 
     const bishop4 = new FigureStore(FigureType.BISHOP, Color.WHITE, new Vector2(5, 7));
     gameStore.figures.push(bishop4);
+    
+    // Королевы
+    const queen1 = new FigureStore(FigureType.QUEEN, Color.BLACK, new Vector2(3, 0));
+    gameStore.figures.push(queen1);
+
+    const queen2 = new FigureStore(FigureType.QUEEN, Color.WHITE, new Vector2(3, 7));
+    gameStore.figures.push(queen2);
+
 })();
