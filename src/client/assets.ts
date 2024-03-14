@@ -65,5 +65,22 @@ export default async function loadAssets(){
             alias: 'black_knight_selected',
             src: 'assets/figures/blackKnightSelected.png',
         },
+        // BISHOP
+        {
+            alias: 'white_bishop',
+            src: 'assets/figures/whiteBishop.png',
+        },
+        {
+            alias: 'white_bishop_selected',
+            src: 'assets/figures/whiteBishopSelected.png',
+        },
+        {
+            alias: 'black_bishop',
+            src: 'assets/figures/blackBishop.png',
+        },
+        {
+            alias: 'black_bishop_selected',
+            src: 'assets/figures/blackBishopSelected.png',
+        },
     ])
 }
