@@ -54,4 +54,16 @@ import Vector2 from './helpers/Vector2';
 
     const knight4 = new FigureStore(FigureType.KNIGHT, Color.WHITE, new Vector2(6, 7));
     gameStore.figures.push(knight4);
+    // Слоны
+    const bishop1 = new FigureStore(FigureType.BISHOP, Color.BLACK, new Vector2(2, 0));
+    gameStore.figures.push(bishop1);
+
+    const bishop2 = new FigureStore(FigureType.BISHOP, Color.BLACK, new Vector2(5, 0));
+    gameStore.figures.push(bishop2);
+
+    const bishop3 = new FigureStore(FigureType.BISHOP, Color.WHITE, new Vector2(2, 7));
+    gameStore.figures.push(bishop3);
+
+    const bishop4 = new FigureStore(FigureType.BISHOP, Color.WHITE, new Vector2(5, 7));
+    gameStore.figures.push(bishop4);
 })();

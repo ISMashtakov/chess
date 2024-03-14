@@ -4,6 +4,7 @@ import Vector2 from './Vector2';
 import { Color, FigureType } from './enums';
 
 const ORTO_DIRECTIONS = [Vector2.UP(), Vector2.DOWN(), Vector2.RIGHT(), Vector2.LEFT()];
+const DIA_DIRECTIONS = [new Vector2(1, 1), new Vector2(1, -1), new Vector2(-1, 1), new Vector2(-1, -1),];
 
 abstract class MoveCheckerBase {
     store: GameStore;
@@ -108,6 +109,18 @@ class KnightMoveChecker extends MoveCheckerBase {
     }
 }
 
+class BishopMoveChecker extends MoveCheckerBase {
+    public getPossibleMoves(): Vector2[] {
+        let possibleMoves: Vector2[] = [];
+        
+        DIA_DIRECTIONS.forEach(dir => {
+            possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(dir));
+        })
+
+        return possibleMoves;
+    }
+}
+
 
 export default function getMoveChecker(store: GameStore, figure: FigureStore): MoveCheckerBase {
     switch (figure.type.get()) {
@@ -117,6 +130,8 @@ export default function getMoveChecker(store: GameStore, figure: FigureStore): M
             return new RookMoveChecker(store, figure);
         case FigureType.KNIGHT:
             return new KnightMoveChecker(store, figure);
+        case FigureType.BISHOP:
+            return new BishopMoveChecker(store, figure);
         default:
             // TODO delete it
             return new PawnMoveChecker(store, figure);
