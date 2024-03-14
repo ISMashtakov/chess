@@ -3,6 +3,8 @@ import GameStore from '../storages/GameStore';
 import Vector2 from './Vector2';
 import { Color, FigureType } from './enums';
 
+const ORTO_DIRECTIONS = [Vector2.UP(), Vector2.DOWN(), Vector2.RIGHT(), Vector2.LEFT()];
+
 abstract class MoveCheckerBase {
     store: GameStore;
     figure: FigureStore;
@@ -31,13 +33,13 @@ abstract class MoveCheckerBase {
     }
     abstract getPossibleMoves(): Vector2[];
 
-    getPossibleMovesForDirection(dir: Vector2): Vector2[] {
+    getPossibleMovesForDirection(dir: Vector2, max_length: number = 10): Vector2[] {
         const possibleMoves: Vector2[] = [];
         const pos = this.figure.position.get();
 
         let next = pos.add(dir.x, dir.y);
-
-        while(next.isValid()) {
+        let lenght = 1;
+        while(next.isValid() && lenght <= max_length) {
             if (this.isFree(next)){
                 possibleMoves.push(next);
             }
@@ -48,6 +50,7 @@ abstract class MoveCheckerBase {
                 break;
             }
             next = next.add(dir.x, dir.y);
+            lenght++;
         }
 
         return possibleMoves;
@@ -56,36 +59,49 @@ abstract class MoveCheckerBase {
 
 class PawnMoveChecker extends MoveCheckerBase {
     public getPossibleMoves(): Vector2[] {
-        const possibleMoves: Vector2[] = [];
-        const pos = this.figure.position.get();
         const isWhite = this.figure.color.get() === Color.WHITE;
         
-        const next = pos.add(0, isWhite? -1: 1);
-        if (next.isValid()) {
-            if (this.isFree(next)){
-                possibleMoves.push(next);
-                const next2 = next.add(0, isWhite? -1: 1);
-                if (next2.isValid() && (this.isFree(next2) || !this.withMy(next))){
-                        possibleMoves.push(next2);
-                }
-            }
-            else if(!this.withMy(next)) {
-                possibleMoves.push(next);
-            }
-        }
+        const dir = isWhite? Vector2.UP() : Vector2.DOWN();
+        const length = this.figure.isMoved.get()? 1 : 2;
 
-        return possibleMoves;
+        return this.getPossibleMovesForDirection(dir, length);
     }
 }
 
 class RookMoveChecker extends MoveCheckerBase {
     public getPossibleMoves(): Vector2[] {
         let possibleMoves: Vector2[] = [];
-
-        const directions = [new Vector2(0, 1), new Vector2(0, -1), new Vector2(1, 0), new Vector2(-1, 0)];
         
-        directions.forEach(dir => {
+        ORTO_DIRECTIONS.forEach(dir => {
             possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(dir));
+        })
+
+        return possibleMoves;
+    }
+}
+
+class KnightMoveChecker extends MoveCheckerBase {
+    public getPossibleMoves(): Vector2[] {
+        const possibleMoves: Vector2[] = [];
+
+        const pos = this.figure.position.get();
+
+        const moves = [
+            // вправо
+            new Vector2(2, 1), new Vector2(2, -1), 
+            // вниз
+            new Vector2(-1, 2), new Vector2(1, 2),
+            // влево
+            new Vector2(-2, 1), new Vector2(-2, -1), 
+            // вверх
+            new Vector2(-1, -2), new Vector2(1, -2),
+        ]
+        
+        moves.forEach(move => {
+            const newPos = pos.add(move.x, move.y);
+            if (newPos.isValid() && (this.isFree(newPos) || !this.withMy(newPos))) {
+                possibleMoves.push(newPos);
+            }
         })
 
         return possibleMoves;
@@ -99,6 +115,8 @@ export default function getMoveChecker(store: GameStore, figure: FigureStore): M
             return new PawnMoveChecker(store, figure);
         case FigureType.ROOK:
             return new RookMoveChecker(store, figure);
+        case FigureType.KNIGHT:
+            return new KnightMoveChecker(store, figure);
         default:
             // TODO delete it
             return new PawnMoveChecker(store, figure);

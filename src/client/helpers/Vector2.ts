@@ -22,4 +22,17 @@ export default class Vector2 {
     equal(a: Vector2): boolean {
         return this.x === a.x && this.y === a.y;
     }
+
+    static UP(): Vector2 {
+        return new Vector2(0, -1);
+    }
+    static DOWN(): Vector2 {
+        return new Vector2(0, 1);
+    }
+    static RIGHT(): Vector2 {
+        return new Vector2(1, 0);
+    }
+    static LEFT(): Vector2 {
+        return new Vector2(-1, 0);
+    }
 }
