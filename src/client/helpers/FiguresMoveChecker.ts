@@ -121,6 +121,18 @@ class BishopMoveChecker extends MoveCheckerBase {
     }
 }
 
+class QuuenMoveChecker extends MoveCheckerBase {
+    public getPossibleMoves(): Vector2[] {
+        let possibleMoves: Vector2[] = [];
+        
+        DIA_DIRECTIONS.concat(ORTO_DIRECTIONS).forEach(dir => {
+            possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(dir));
+        })
+
+        return possibleMoves;
+    }
+}
+
 
 export default function getMoveChecker(store: GameStore, figure: FigureStore): MoveCheckerBase {
     switch (figure.type.get()) {
@@ -132,6 +144,8 @@ export default function getMoveChecker(store: GameStore, figure: FigureStore): M
             return new KnightMoveChecker(store, figure);
         case FigureType.BISHOP:
             return new BishopMoveChecker(store, figure);
+        case FigureType.QUEEN:
+            return new QuuenMoveChecker(store, figure);
         default:
             // TODO delete it
             return new PawnMoveChecker(store, figure);
