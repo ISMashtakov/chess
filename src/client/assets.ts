@@ -48,5 +48,22 @@ export default async function loadAssets(){
             alias: 'black_rook_selected',
             src: 'assets/figures/blackRookSelected.png',
         },
+        // KNIGHT
+        {
+            alias: 'white_knight',
+            src: 'assets/figures/whiteKnight.png',
+        },
+        {
+            alias: 'white_knight_selected',
+            src: 'assets/figures/whiteKnightSelected.png',
+        },
+        {
+            alias: 'black_knight',
+            src: 'assets/figures/blackKnight.png',
+        },
+        {
+            alias: 'black_knight_selected',
+            src: 'assets/figures/blackKnightSelected.png',
+        },
     ])
 }

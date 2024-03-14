@@ -10,6 +10,11 @@ export default class Figure extends BaseController<FigureStore, FigureView>{
         super(store, new FigureView(store));
         this.gameStore = gameStore;
         this.view.onClick.subscribe(this, () => this.clickHandler())
+        this.store.position.subscribe(this, () => this.moveHandler(), false)
+    }
+
+    moveHandler(){
+        this.store.isMoved.set(true);
     }
 
     clickHandler(): void {
