@@ -14,6 +14,7 @@ export default async function loadAssets(){
             alias: 'hintCell',
             src: 'assets/hintCell.png',
         },
+        // PAWN
         {
             alias: 'white_pawn',
             src: 'assets/figures/whitePawn.png',
@@ -29,6 +30,23 @@ export default async function loadAssets(){
         {
             alias: 'black_pawn_selected',
             src: 'assets/figures/blackPawnSelected.png',
+        },
+        // ROOK
+        {
+            alias: 'white_rook',
+            src: 'assets/figures/whiteRook.png',
+        },
+        {
+            alias: 'white_rook_selected',
+            src: 'assets/figures/whiteRookSelected.png',
+        },
+        {
+            alias: 'black_rook',
+            src: 'assets/figures/blackRook.png',
+        },
+        {
+            alias: 'black_rook_selected',
+            src: 'assets/figures/blackRookSelected.png',
         },
     ])
 }

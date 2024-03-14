@@ -16,6 +16,10 @@ export default class Vector2 {
     }
 
     in(ar: Vector2[]): boolean {
-        return ar.find(v => v.x === this.x && v.y === this.y) !== undefined;
+        return ar.find(v => this.equal(v)) !== undefined;
+    }
+
+    equal(a: Vector2): boolean {
+        return this.x === a.x && this.y === a.y;
     }
 }
