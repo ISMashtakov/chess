@@ -3,7 +3,7 @@ import BaseView from './BaseView';
 import { BOARD_CELL_ZINDEX, CELL_SIZE } from '../helpers/constants';
 import { Container } from 'pixi.js';
 import Vector2 from '../helpers/Vector2';
-import getMoveChecker from '../helpers/FiguresMoveChecker';
+import getMoveChecker, { Castling } from '../helpers/FiguresMoveChecker';
 import FigureView from './FigureView';
 import Event from '../helpers/Event';
 
@@ -35,14 +35,18 @@ export default class BoardView extends BaseView<GameStore> {
     drawBoard(){
         this.cellsContainer?.removeChildren();
 
-        const hints = this.getHints();
+        const posibleMoves = this.getPosibleMoves();
+        const posibleCastlings = this.getPosibleCastlings();
 
         for(let i = 0; i < 8; i++){
             for (let j = 0; j < 8; j++) {
                 let square = null;
                 const pos = new Vector2(i, j)
-                if (pos.in(hints)) {
+                if (pos.in(posibleMoves)) {
                     square = this.getSpriteByName('hintCell');
+                }
+                else if (pos.in(posibleCastlings.map(castling => castling.posForKing))) {
+                    square = this.getSpriteByName('hintCastlingCell');
                 }
                 else{
                     if ((i + j) % 2 === 0) {
@@ -61,7 +65,7 @@ export default class BoardView extends BaseView<GameStore> {
         }
     }
 
-    getHints(): Vector2[]{
+    getPosibleMoves(): Vector2[]{
         const selectedFigure = this.store.selectedFigure.get();
 
         if(selectedFigure === null){
@@ -70,6 +74,16 @@ export default class BoardView extends BaseView<GameStore> {
         
         const checker = getMoveChecker(this.store, selectedFigure);
         return checker.getPossibleMoves();        
+    }
+    getPosibleCastlings(): Castling[]{
+        const selectedFigure = this.store.selectedFigure.get();
+
+        if(selectedFigure === null){
+            return []
+        }
+        
+        const checker = getMoveChecker(this.store, selectedFigure);
+        return checker.getPossibleCastlings();        
     }
 
     addFigure(figure: FigureView){

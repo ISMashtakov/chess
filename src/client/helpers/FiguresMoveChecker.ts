@@ -6,6 +6,18 @@ import { Color, FigureType } from './enums';
 const ORTO_DIRECTIONS = [Vector2.UP(), Vector2.DOWN(), Vector2.RIGHT(), Vector2.LEFT()];
 const DIA_DIRECTIONS = [new Vector2(1, 1), new Vector2(1, -1), new Vector2(-1, 1), new Vector2(-1, -1),];
 
+export class Castling {
+    posForKing: Vector2;
+    posForRook: Vector2;
+    rook: FigureStore;
+
+    constructor(posForKing: Vector2, posForRook: Vector2, rook: FigureStore) {
+        this.posForKing = posForKing;
+        this.posForRook = posForRook;
+        this.rook = rook;
+    }
+}
+
 abstract class MoveCheckerBase {
     store: GameStore;
     figure: FigureStore;
@@ -55,6 +67,9 @@ abstract class MoveCheckerBase {
         }
 
         return possibleMoves;
+    }
+    getPossibleCastlings(): Castling[] {
+        return [];
     }
 }
 
@@ -121,7 +136,7 @@ class BishopMoveChecker extends MoveCheckerBase {
     }
 }
 
-class QuuenMoveChecker extends MoveCheckerBase {
+class QueenMoveChecker extends MoveCheckerBase {
     public getPossibleMoves(): Vector2[] {
         let possibleMoves: Vector2[] = [];
         
@@ -143,6 +158,27 @@ class KingMoveChecker extends MoveCheckerBase {
 
         return possibleMoves;
     }
+
+    public getPossibleCastlings(): Castling[] {
+        const possibleCastlings: Castling[] = [];
+        const pos = this.figure.position.get();
+        const figureForCastlingR = this.getFigureAt(pos.add(3, 0));
+        const figureForCastlingL = this.getFigureAt(pos.add(-4, 0));
+        
+        if (figureForCastlingR !== undefined){
+            if (!this.figure.isMoved.get() && !figureForCastlingR.isMoved.get() && this.isFree(pos.add(2, 0)) && this.isFree(pos.add(1, 0))){
+                possibleCastlings.push(new Castling(pos.add(2, 0), pos.add(1, 0), figureForCastlingR));
+            }
+        }
+
+        if (figureForCastlingL !== undefined){
+            if (!this.figure.isMoved.get() && !figureForCastlingL.isMoved.get() && this.isFree(pos.add(-3, 0)) && this.isFree(pos.add(-2, 0)) && this.isFree(pos.add(-1, 0))){
+                possibleCastlings.push(new Castling(pos.add(-2, 0), pos.add(-1, 0), figureForCastlingL));
+            }
+        }
+
+        return possibleCastlings;
+    }
 }
 
 export default function getMoveChecker(store: GameStore, figure: FigureStore): MoveCheckerBase {
@@ -156,7 +192,7 @@ export default function getMoveChecker(store: GameStore, figure: FigureStore): M
         case FigureType.BISHOP:
             return new BishopMoveChecker(store, figure);
         case FigureType.QUEEN:
-            return new QuuenMoveChecker(store, figure);
+            return new QueenMoveChecker(store, figure);
         case FigureType.KING:
             return new KingMoveChecker(store, figure);
     }
