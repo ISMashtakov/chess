@@ -4,26 +4,12 @@ import Board from './controllers/Board';
 import GameStore from './storages/GameStore';
 import FigureStore from './storages/FigureStore';
 import { Color, FigureType } from './helpers/enums';
-import Vector2 from './helpers/Vector2';
+import Vector2 from '../general/helpers/Vector2';
+import Network from './network/Network';
+import TurnHandler from './controllers/TurnHandler';
 
-(async () =>
-{
-    await loadAssets();
-    
-    const app = new Application();
 
-    // Задний фон
-    await app.init({ background: '#1099bb', resizeTo: window });
-    document.body.appendChild(app.canvas);
-
-    //Создание стора
-    const gameStore = new GameStore();
-    
-    // Создание доски
-    const board = new Board(gameStore);
-    app.stage.addChild(board.view.root);
-
-    //Создание фигур
+function createFigures(gameStore: GameStore){
     for(let i = 0; i < 8; i++){
         const pawn = new FigureStore(FigureType.PAWN, Color.BLACK, new Vector2(i, 1));
         gameStore.figures.push(pawn);
@@ -80,5 +66,33 @@ import Vector2 from './helpers/Vector2';
 
     const king2 = new FigureStore(FigureType.KING, Color.WHITE, new Vector2(4, 7));
     gameStore.figures.push(king2);
+}
+
+
+(async () =>
+{
+    await loadAssets();
+    
+    const app = new Application();
+
+    // Задний фон
+    await app.init({ background: '#1099bb', resizeTo: window });
+    document.body.appendChild(app.canvas);
+
+    // Cоздание подключения
+    const net = new Network();
+
+    //Создание стора
+    const gameStore = new GameStore();
+
+    //  Cоздание обработчика ходов
+    const turnHandler = new TurnHandler(gameStore, net);
+    
+    // Создание доски
+    const board = new Board(gameStore, turnHandler);
+    app.stage.addChild(board.view.root);
+
+    //Создание фигур
+    createFigures(gameStore);
 
 })();
