@@ -18,9 +18,8 @@ export default class Figure extends BaseController<FigureStore, FigureView>{
     }
 
     clickHandler(): void {
-        if(this.store.color.get() === this.gameStore.myColor.get()){
+        if(this.store.color.get() === this.gameStore.myColor.get() && this.store.color.get() === this.gameStore.turn.get()){
             this.gameStore.selectedFigure.set(this.store);
         }
     }
-   
 }

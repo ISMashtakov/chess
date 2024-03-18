@@ -2,9 +2,9 @@ import { Container } from 'pixi.js';
 import FigureStore from "../storages/FigureStore";
 import BaseView from "./BaseView";
 import { enum2str } from "../helpers/enums";
-import Vector2 from "../helpers/Vector2";
+import Vector2 from "../../general/helpers/Vector2";
 import { CELL_SIZE, FIGURE_ZINDEX } from "../helpers/constants";
-import Event from '../helpers/Event';
+import Event from '../../general/helpers/Event';
 
 
 export default class FigureView extends BaseView<FigureStore> {

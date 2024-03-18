@@ -2,10 +2,10 @@ import GameStore from '../storages/GameStore';
 import BaseView from './BaseView';
 import { BOARD_CELL_ZINDEX, CELL_SIZE } from '../helpers/constants';
 import { Container } from 'pixi.js';
-import Vector2 from '../helpers/Vector2';
+import Vector2 from '../../general/helpers/Vector2';
 import getMoveChecker from '../helpers/FiguresMoveChecker';
 import FigureView from './FigureView';
-import Event from '../helpers/Event';
+import Event from '../../general/helpers/Event';
 
 interface OnClickToCellArgs {
     pos: Vector2

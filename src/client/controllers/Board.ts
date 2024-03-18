@@ -1,17 +1,20 @@
 import GameStore from "../storages/GameStore";
 import BoardView from "../views/BoardView";
 import BaseController from "./BaseController";
-import { ObservationEventType } from '../helpers/ArrayObservable';
+import { ObservationEventType } from '../../general/helpers/ArrayObservable';
 import FigureStore from '../storages/FigureStore';
 import Figure from './Figure';
-import Vector2 from "../helpers/Vector2";
+import Vector2 from "../../general/helpers/Vector2";
 import getMoveChecker from "../helpers/FiguresMoveChecker";
+import TurnHandler from './TurnHandler';
 
 export default class Board extends BaseController<GameStore, BoardView> {
     figures: Array<Figure> = []
+    turnHandler: TurnHandler;
     
-    constructor(store: GameStore) {
+    constructor(store: GameStore, turnHandler: TurnHandler) {
         super(store, new BoardView(store));
+        this.turnHandler = turnHandler;
 
         store.figures.get().forEach(this.createFigure)
 
@@ -41,23 +44,16 @@ export default class Board extends BaseController<GameStore, BoardView> {
         const possibleMoves = moveChecker.getPossibleMoves();
         
         if (pos.in(possibleMoves)) {
-            if (!moveChecker.isFree(pos)){
-                const figure = moveChecker.getFigureAt(pos);
-                if(figure && !moveChecker.isMy(figure)){
-                    this.store.figures.remove(figure);
-                }
-            }
-            selectedFigure.position.set(pos);
+            this.turnHandler.handleMove(selectedFigure, pos);
             this.store.selectedFigure.set(null);
         }
         else{
-            if (moveChecker.isFree(pos) || !moveChecker.withMy(pos)){
+            if (this.store.isFree(pos) || !this.store.withMy(pos)){
                 this.store.selectedFigure.set(null);
             }
         }
-
     }
-
+    
     private createFigure(figureStore: FigureStore){
         const figure = new Figure(figureStore, this.store);
         this.figures.push(figure);

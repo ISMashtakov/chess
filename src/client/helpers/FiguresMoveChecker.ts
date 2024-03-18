@@ -1,6 +1,6 @@
 import FigureStore from '../storages/FigureStore';
 import GameStore from '../storages/GameStore';
-import Vector2 from './Vector2';
+import Vector2 from '../../general/helpers/Vector2';
 import { Color, FigureType } from './enums';
 
 const ORTO_DIRECTIONS = [Vector2.UP(), Vector2.DOWN(), Vector2.RIGHT(), Vector2.LEFT()];
@@ -15,23 +15,6 @@ abstract class MoveCheckerBase {
         this.figure = figure;
     }
 
-    isMy(figure: FigureStore): boolean {
-        return figure.color.get() === this.store.myColor.get();
-    }
-
-    withMy(pos: Vector2): boolean {
-        const figure = this.getFigureAt(pos)
-        
-        return figure !== undefined && this.isMy(figure);
-    }
-
-    getFigureAt(pos: Vector2): FigureStore | undefined {
-        return this.store.figures.get().find(fig => fig.position.get().equal(pos));
-    }
-
-    isFree(pos: Vector2): boolean {
-        return this.getFigureAt(pos) === undefined;
-    }
     abstract getPossibleMoves(): Vector2[];
 
     getPossibleMovesForDirection(dir: Vector2, max_length: number = 10): Vector2[] {
@@ -41,11 +24,11 @@ abstract class MoveCheckerBase {
         let next = pos.add(dir.x, dir.y);
         let lenght = 1;
         while(next.isValid() && lenght <= max_length) {
-            if (this.isFree(next)){
+            if (this.store.isFree(next)){
                 possibleMoves.push(next);
             }
             else{
-                if(!this.withMy(next)){
+                if(!this.store.withMy(next)){
                     possibleMoves.push(next);
                 }
                 break;
@@ -100,7 +83,7 @@ class KnightMoveChecker extends MoveCheckerBase {
         
         moves.forEach(move => {
             const newPos = pos.add(move.x, move.y);
-            if (newPos.isValid() && (this.isFree(newPos) || !this.withMy(newPos))) {
+            if (newPos.isValid() && (this.store.isFree(newPos) || !this.store.withMy(newPos))) {
                 possibleMoves.push(newPos);
             }
         })
