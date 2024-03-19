@@ -60,7 +60,7 @@ export default class Board extends BaseController<GameStore, BoardView> {
 
         // const currentCastling = 
 
-        if (pos.in(posibleCastlings.map(castling => castling.posForKing))){ {
+        if (pos.in(posibleCastlings.map(castling => castling.posForKing))){
             const figure = moveChecker.getFigureAt(pos);
             selectedFigure.position.set(pos);
             
