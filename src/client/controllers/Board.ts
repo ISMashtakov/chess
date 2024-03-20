@@ -58,13 +58,15 @@ export default class Board extends BaseController<GameStore, BoardView> {
             }
         }
 
-        // const currentCastling = 
+        
 
         if (pos.in(posibleCastlings.map(castling => castling.posForKing))){
-            const figure = moveChecker.getFigureAt(pos);
             selectedFigure.position.set(pos);
-            
-
+            const rook = posibleCastlings.find(castling => castling.posForKing.equal(pos))?.rook
+            const posForRook = posibleCastlings.find(castling => castling.posForKing.equal(pos))?.posForRook;
+            if (rook && posForRook){
+                rook.position.set(posForRook);
+            }
         }
 
     }
