@@ -60,12 +60,28 @@ abstract class MoveCheckerBase {
 
 class PawnMoveChecker extends MoveCheckerBase {
     public getPossibleMoves(): Vector2[] {
+        // TODO: сделать не так некрасиво
+        let possibleMoves: Vector2[] = [];
         const isWhite = this.figure.color.get() === Color.WHITE;
-        
+        const pos = this.figure.position.get()
         const dir = isWhite? Vector2.UP() : Vector2.DOWN();
-        const length = this.figure.isMoved.get()? 1 : 2;
+        const yDirAttack = isWhite? -1 : 1;
+        const nextFigureR = this.getFigureAt(pos.add(dir.x+1, dir.y))
+        const nextFigureL = this.getFigureAt(pos.add(dir.x-1, dir.y))
+        const nextFigureC1 = this.getFigureAt(pos.add(dir.x, dir.y))
+        const nextFigureC2 = this.getFigureAt(pos.add(dir.x, dir.y + yDirAttack))
 
-        return this.getPossibleMovesForDirection(dir, length);
+        if (nextFigureR && !this.isMy(nextFigureR))
+            possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(new Vector2 (1, yDirAttack), 1));
+        if (nextFigureL && !this.isMy(nextFigureL))
+            possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(new Vector2 (-1, yDirAttack), 1));
+        if (!nextFigureC1){
+            possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(dir, 1));
+            if (!nextFigureC2 && !this.figure.isMoved.get())
+                possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(dir, 2));
+        }
+
+        return possibleMoves;
     }
 }
 
