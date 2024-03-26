@@ -14,6 +14,10 @@ export default async function loadAssets(){
             alias: 'hintCell',
             src: 'assets/hintCell.png',
         },
+        {
+            alias: 'hintCastlingCell',
+            src: 'assets/hintCastlingCell.png',
+        },
         // PAWN
         {
             alias: 'white_pawn',

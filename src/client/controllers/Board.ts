@@ -34,12 +34,10 @@ export default class Board extends BaseController<GameStore, BoardView> {
         if(!selectedFigure){
             return;
         }
-
         this.view.drawBoard();
-
         const moveChecker = getMoveChecker(this.store, selectedFigure);
         const possibleMoves = moveChecker.getPossibleMoves();
-        
+        const posibleCastlings = moveChecker.getPossibleCastlings();
         if (pos.in(possibleMoves)) {
             if (!moveChecker.isFree(pos)){
                 const figure = moveChecker.getFigureAt(pos);
@@ -54,6 +52,11 @@ export default class Board extends BaseController<GameStore, BoardView> {
             if (moveChecker.isFree(pos) || !moveChecker.withMy(pos)){
                 this.store.selectedFigure.set(null);
             }
+        }
+        const chosenCastling = posibleCastlings.find(castling => castling.posForKing.equal(pos))
+        if (chosenCastling){
+            selectedFigure.position.set(pos);
+                chosenCastling.rook.position.set(chosenCastling.posForRook);
         }
 
     }
