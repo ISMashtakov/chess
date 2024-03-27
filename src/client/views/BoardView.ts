@@ -3,7 +3,7 @@ import BaseView from './BaseView';
 import { BOARD_CELL_ZINDEX, CELL_SIZE } from '../helpers/constants';
 import { Container } from 'pixi.js';
 import Vector2 from '../../general/helpers/Vector2';
-import getMoveChecker from '../helpers/FiguresMoveChecker';
+import getMoveChecker, { Castling } from '../helpers/FiguresMoveChecker';
 import FigureView from './FigureView';
 import Event from '../../general/helpers/Event';
 
