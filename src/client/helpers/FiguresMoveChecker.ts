@@ -1,6 +1,6 @@
 import FigureStore from '../storages/FigureStore';
 import GameStore from '../storages/GameStore';
-import Vector2 from './Vector2';
+import Vector2 from '../../general/helpers/Vector2';
 import { Color, FigureType } from './enums';
 
 const ORTO_DIRECTIONS = [Vector2.UP(), Vector2.DOWN(), Vector2.RIGHT(), Vector2.LEFT()];
@@ -27,23 +27,6 @@ abstract class MoveCheckerBase {
         this.figure = figure;
     }
 
-    isMy(figure: FigureStore): boolean {
-        return figure.color.get() === this.store.myColor.get();
-    }
-
-    withMy(pos: Vector2): boolean {
-        const figure = this.getFigureAt(pos)
-        
-        return figure !== undefined && this.isMy(figure);
-    }
-
-    getFigureAt(pos: Vector2): FigureStore | undefined {
-        return this.store.figures.get().find(fig => fig.position.get().equal(pos));
-    }
-
-    isFree(pos: Vector2): boolean {
-        return this.getFigureAt(pos) === undefined;
-    }
     abstract getPossibleMoves(): Vector2[];
 
     getPossibleMovesForDirection(dir: Vector2, max_length: number = 10): Vector2[] {
@@ -53,11 +36,11 @@ abstract class MoveCheckerBase {
         let next = pos.add(dir.x, dir.y);
         let lenght = 1;
         while(next.isValid() && lenght <= max_length) {
-            if (this.isFree(next)){
+            if (this.store.isFree(next)){
                 possibleMoves.push(next);
             }
             else{
-                if(!this.withMy(next)){
+                if(!this.store.withMy(next)){
                     possibleMoves.push(next);
                 }
                 break;
@@ -81,14 +64,14 @@ class PawnMoveChecker extends MoveCheckerBase {
         const pos = this.figure.position.get()
         const dir = isWhite? Vector2.UP() : Vector2.DOWN();
         const yDirAttack = isWhite? -1 : 1;
-        const nextFigureR = this.getFigureAt(pos.add(dir.x+1, dir.y))
-        const nextFigureL = this.getFigureAt(pos.add(dir.x-1, dir.y))
-        const nextFigureC1 = this.getFigureAt(pos.add(dir.x, dir.y))
-        const nextFigureC2 = this.getFigureAt(pos.add(dir.x, dir.y + yDirAttack))
+        const nextFigureR = this.store.getFigureAt(pos.add(dir.x+1, dir.y))
+        const nextFigureL = this.store.getFigureAt(pos.add(dir.x-1, dir.y))
+        const nextFigureC1 = this.store.getFigureAt(pos.add(dir.x, dir.y))
+        const nextFigureC2 = this.store.getFigureAt(pos.add(dir.x, dir.y + yDirAttack))
 
-        if (nextFigureR && !this.isMy(nextFigureR))
+        if (nextFigureR && !this.store.isMy(nextFigureR))
             possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(new Vector2 (1, yDirAttack), 1));
-        if (nextFigureL && !this.isMy(nextFigureL))
+        if (nextFigureL && !this.store.isMy(nextFigureL))
             possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(new Vector2 (-1, yDirAttack), 1));
         if (!nextFigureC1){
             possibleMoves = possibleMoves.concat(this.getPossibleMovesForDirection(dir, 1));
@@ -131,7 +114,7 @@ class KnightMoveChecker extends MoveCheckerBase {
         
         moves.forEach(move => {
             const newPos = pos.add(move.x, move.y);
-            if (newPos.isValid() && (this.isFree(newPos) || !this.withMy(newPos))) {
+            if (newPos.isValid() && (this.store.isFree(newPos) || !this.store.withMy(newPos))) {
                 possibleMoves.push(newPos);
             }
         })
@@ -178,17 +161,17 @@ class KingMoveChecker extends MoveCheckerBase {
     public getPossibleCastlings(): Castling[] {
         const possibleCastlings: Castling[] = [];
         const pos = this.figure.position.get();
-        const figureForCastlingR = this.getFigureAt(pos.add(3, 0));
-        const figureForCastlingL = this.getFigureAt(pos.add(-4, 0));
+        const figureForCastlingR = this.store.getFigureAt(pos.add(3, 0));
+        const figureForCastlingL = this.store.getFigureAt(pos.add(-4, 0));
         
         if (figureForCastlingR !== undefined){
-            if (!this.figure.isMoved.get() && !figureForCastlingR.isMoved.get() && this.isFree(pos.add(2, 0)) && this.isFree(pos.add(1, 0))){
+            if (!this.figure.isMoved.get() && !figureForCastlingR.isMoved.get() && this.store.isFree(pos.add(2, 0)) && this.store.isFree(pos.add(1, 0))){
                 possibleCastlings.push(new Castling(pos.add(2, 0), pos.add(1, 0), figureForCastlingR));
             }
         }
 
         if (figureForCastlingL !== undefined){
-            if (!this.figure.isMoved.get() && !figureForCastlingL.isMoved.get() && this.isFree(pos.add(-3, 0)) && this.isFree(pos.add(-2, 0)) && this.isFree(pos.add(-1, 0))){
+            if (!this.figure.isMoved.get() && !figureForCastlingL.isMoved.get() && this.store.isFree(pos.add(-3, 0)) && this.store.isFree(pos.add(-2, 0)) && this.store.isFree(pos.add(-1, 0))){
                 possibleCastlings.push(new Castling(pos.add(-2, 0), pos.add(-1, 0), figureForCastlingL));
             }
         }

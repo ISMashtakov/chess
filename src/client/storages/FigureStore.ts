@@ -1,5 +1,5 @@
-import Vector2 from '../helpers/Vector2';
-import { Observable } from '../helpers/Observable';
+import Vector2 from '../../general/helpers/Vector2';
+import { Observable } from '../../general/helpers/Observable';
 import { Color, FigureType } from '../helpers/enums';
 
 export default class FigureStore {
