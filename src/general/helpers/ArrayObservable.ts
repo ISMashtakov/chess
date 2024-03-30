@@ -1,45 +1,81 @@
+/**
+ * Типы событий с массивом
+ */
 export enum ObservationEventType {
-    ADD,
-    REMOVE
+  ADD,
+  REMOVE
 }
 
-export interface ObservationEvent<T>{
-    readonly type: ObservationEventType;
-    readonly value: T;
+/**
+ * Информация о событии
+ * @template T тип элементов массива
+ */
+export interface ObservationEvent<T> {
+  readonly type: ObservationEventType
+  readonly value: T
 }
 
-export interface ArraySubscribtion<T>{
-    obj: object;
-    callback: (event: ObservationEvent<T>) => void;
+/**
+ * Объект подписки на изменение массива
+ * @template T тип элементов массива
+ */
+export interface ArraySubscribtion<T> {
+  obj: object
+  callback: (event: ObservationEvent<T>) => void
 }
 
-export class ObservableArray<T>{
-    private value: Array<T> = [];
-    private subscribers: Array<ArraySubscribtion<T>> = [];
+/**
+ * Создание наблюдаемого массива
+ * @template T тип элементов массива
+ */
+export class ObservableArray<T> {
+  private value: T[] = []
+  private subscribers: Array<ArraySubscribtion<T>> = []
 
-    public get(): Array<T> {
-        return this.value;
-    }
-    
-    public push(value: T){
-        this.value.push(value);
-        this.subscribers.forEach(subscriber => {
-            subscriber.callback({type: ObservationEventType.ADD, value});
-        })
-    }
+  /**
+   * Получение всего массива (!!!Изменения не будут отслеживаться)
+   * @returns хранимый массив
+   */
+  public get (): T[] {
+    return this.value
+  }
 
-    public remove(value: T){
-        this.value = this.value.filter(item => item!== value);
-        this.subscribers.forEach(subscriber => {
-            subscriber.callback({type: ObservationEventType.REMOVE, value});
-        })
-    }
+  /**
+   * Добавление элемента в массив
+   * @param value новый элемент
+   */
+  public push (value: T) {
+    this.value.push(value)
+    this.subscribers.forEach(subscriber => {
+      subscriber.callback({ type: ObservationEventType.ADD, value })
+    })
+  }
 
-    public subscribe(obj: object, callback: (value: ObservationEvent<T>) => void){
-        this.subscribers.push({obj, callback});
-    }
-      
-    public unsubscribe(obj: object){
-        this.subscribers = this.subscribers.filter(subscriber => subscriber.obj!== obj);
-    }
-} 
+  /**
+   * Удаление элемента из массива
+   * @param value
+   */
+  public remove (value: T) {
+    this.value = this.value.filter(item => item !== value)
+    this.subscribers.forEach(subscriber => {
+      subscriber.callback({ type: ObservationEventType.REMOVE, value })
+    })
+  }
+
+  /**
+   * Подписка на события изменений массива
+   * @param obj подписываемый объект
+   * @param callback действия при событии
+   */
+  public subscribe (obj: object, callback: (value: ObservationEvent<T>) => void) {
+    this.subscribers.push({ obj, callback })
+  }
+
+  /**
+   * Отписка от событий изменений массива
+   * @param obj отписываемый объект
+   */
+  public unsubscribe (obj: object) {
+    this.subscribers = this.subscribers.filter(subscriber => subscriber.obj !== obj)
+  }
+}

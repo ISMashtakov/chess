@@ -1,4 +1,6 @@
-export const BOARD_CELL_ZINDEX = 10;
-export const FIGURE_ZINDEX = 20;
+// Z индексы
+export const BOARD_CELL_ZINDEX = 10 // клетки поля
+export const FIGURE_ZINDEX = 20 // фигуры
 
-export const CELL_SIZE = 100;
+// Размер клетки в пикселях
+export const CELL_SIZE = 100

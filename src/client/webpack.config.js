@@ -1,19 +1,18 @@
-import path from 'path';
-
+import path from 'path'
 
 // Library output details
-var LIBRARY_NAME = 'js';
-const ROOT_PATH = path.resolve('.');
+const LIBRARY_NAME = 'js'
+const ROOT_PATH = path.resolve('.')
 
 // Build, source, etc paths
-var PATHS = {
+const PATHS = {
   entryPoint: path.resolve(ROOT_PATH, 'index.ts'),
-  output: path.resolve(ROOT_PATH, '../../public'),
+  output: path.resolve(ROOT_PATH, '../../public')
 }
 
 // Webpack config
 export default {
-  mode: "production",
+  mode: 'production',
   entry: PATHS.entryPoint,
   output: {
     path: PATHS.output,
@@ -31,12 +30,12 @@ export default {
     rules: [{
       test: /\.tsx?$/,
       loader: 'ts-loader',
-      exclude: /node_modules/,
+      exclude: /node_modules/
     }]
   },
   plugins: [
   ],
   externals: [
-      {"pixi.js": "PIXI"},
+    { 'pixi.js': 'PIXI' }
   ]
 }
