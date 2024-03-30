@@ -71,7 +71,7 @@ function createFigures (gameStore: GameStore) {
   gameStore.figures.push(king2)
 }
 
-await (async () => {
+(async () => { // eslint-disable-line @typescript-eslint/no-floating-promises
   await loadAssets()
 
   const app = new Application()
