@@ -1,5 +1,5 @@
 import type Vector2 from './helpers/Vector2'
-
+const a  = 1;
 export enum MessageType {
   START = 'START',
   MOVE = 'MOVE',
