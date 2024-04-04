@@ -10,7 +10,7 @@ export interface StartMessageArgs {
 }
 
 export interface MoveMessageArgs {
-  fromX: number
+  fromX: number 1
   fromY: number
   toX: number
   toY: number
