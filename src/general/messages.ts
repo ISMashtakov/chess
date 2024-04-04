@@ -1,5 +1,5 @@
 import type Vector2 from './helpers/Vector2'
-
+const A = 1
 export enum MessageType {
   START = 'START',
   MOVE = 'MOVE',
@@ -10,7 +10,7 @@ export interface StartMessageArgs {
 }
 
 export interface MoveMessageArgs {
-  fromX: number 1
+  fromX: number
   fromY: number
   toX: number
   toY: number
