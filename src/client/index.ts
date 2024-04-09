@@ -7,6 +7,7 @@ import { Color, FigureType } from './helpers/enums'
 import Vector2 from '../general/helpers/Vector2'
 import Network from './network/Network'
 import TurnHandler from './controllers/TurnHandler'
+import StateGameView from './views/StateGameView'
 
 /**
  * Создание и добавление всех фигур
@@ -77,7 +78,7 @@ function createFigures (gameStore: GameStore) {
   const app = new Application()
 
   // Задний фон
-  await app.init({ background: '#1099bb', resizeTo: window })
+  await app.init({ background: '#083D77', resizeTo: window })
   document.body.appendChild(app.canvas)
 
   // Cоздание подключения
@@ -88,6 +89,10 @@ function createFigures (gameStore: GameStore) {
 
   //  Cоздание обработчика ходов
   const turnHandler = new TurnHandler(gameStore, net)
+
+  // Создание меню
+  const stateGame = new StateGameView(gameStore)
+  app.stage.addChild(stateGame.root)
 
   // Создание доски
   const board = new Board(gameStore, turnHandler)
