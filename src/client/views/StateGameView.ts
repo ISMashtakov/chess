@@ -7,7 +7,7 @@ import { Color } from '../helpers/enums'
  * Представление состояния игры
  */
 export default class StateGameView extends BaseView<GameStore> {
-  StateGameView: Text | undefined
+  stateGame: Text | undefined
   static WIDTH = 400
   static HEIGHT = 400
   static PADDING = 100
@@ -26,10 +26,10 @@ export default class StateGameView extends BaseView<GameStore> {
     menu.stroke({ width: 4, color: '#fff' })
     menu.fill('#1099bb')
 
-    this.StateGameView = new Text(this.getText(), style)
-    this.StateGameView.x = 5
-    this.StateGameView.y = 5
-    menu.addChild(this.StateGameView)
+    this.stateGame = new Text(this.getText(), style)
+    this.stateGame.x = 5
+    this.stateGame.y = 5
+    menu.addChild(this.stateGame)
     return menu
   }
 
@@ -37,7 +37,7 @@ export default class StateGameView extends BaseView<GameStore> {
    * Обновление текста, указывающего кто сейчас ходит
    */
   changeStateGameView () {
-    if (this.StateGameView) { this.StateGameView.text = this.getText() }
+    if (this.stateGame) { this.stateGame.text = this.getText() }
   }
 
   /**
