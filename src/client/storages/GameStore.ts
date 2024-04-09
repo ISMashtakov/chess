@@ -3,15 +3,17 @@ import { Observable } from '../../general/helpers/Observable'
 import type Vector2 from '../../general/helpers/Vector2'
 import { Color } from '../helpers/enums'
 import type FigureStore from './FigureStore'
+import FogOfWarStore from './FogOfWarStore'
 
 /**
  * Класс для хранения информации о состоянии игры
  */
 export default class GameStore {
-  public figures = new ObservableArray<FigureStore>()
-  public myColor = new Observable<Color | null>(null)
-  public selectedFigure = new Observable<FigureStore | null>(null)
-  public turn = new Observable<Color>(Color.WHITE)
+  public readonly figures = new ObservableArray<FigureStore>()
+  public readonly myColor = new Observable<Color | null>(null)
+  public readonly selectedFigure = new Observable<FigureStore | null>(null)
+  public readonly turn = new Observable<Color>(Color.WHITE)
+  public readonly fogOfWarStore = new FogOfWarStore()
 
   constructor () {
     this.selectedFigure.subscribe(this, (c, o) => { this.onChangeSelectedFigure(c, o) })

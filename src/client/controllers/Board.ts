@@ -7,6 +7,7 @@ import Figure from './Figure'
 import type Vector2 from '../../general/helpers/Vector2'
 import getMoveChecker from '../helpers/FiguresMoveChecker'
 import type TurnHandler from './TurnHandler'
+import FogOfWar from './FogOfWar'
 
 /**
  * Контроллер для доски
@@ -14,10 +15,13 @@ import type TurnHandler from './TurnHandler'
 export default class Board extends BaseController<GameStore, BoardView> {
   figures: Figure[] = []
   turnHandler: TurnHandler
+  fogOfWar: FogOfWar
 
   constructor (store: GameStore, turnHandler: TurnHandler) {
     super(store, new BoardView(store))
     this.turnHandler = turnHandler
+    this.fogOfWar = new FogOfWar(store)
+    this.view.addChild(this.fogOfWar.view)
 
     store.figures.get().forEach((i) => { this.createFigure(i) })
 
