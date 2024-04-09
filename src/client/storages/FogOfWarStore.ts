@@ -69,7 +69,7 @@ export default class FogOfWarStore {
      * @returns Возвращает двумерный массив 8x8 заполненный true
      */
   getFullFog (): boolean[][] {
-    const matrix = []
+    const matrix: boolean[][] = []
 
     for (let i = 0; i < 8; i++) {
       matrix[i] = []

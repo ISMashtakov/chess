@@ -14,6 +14,7 @@ export default class FogOfWar extends BaseController<FogOfWarStore, FogOfWarView
     this.gameStore = gameStore
 
     this.gameStore.turn.subscribe(this, () => { this.updateFogOfWar() })
+    this.gameStore.myColor.subscribe(this, () => { this.updateFogOfWar() })
   }
 
   /**
