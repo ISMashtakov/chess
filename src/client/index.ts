@@ -7,7 +7,7 @@ import { Color, FigureType } from './helpers/enums'
 import Vector2 from '../general/helpers/Vector2'
 import Network from './network/Network'
 import TurnHandler from './controllers/TurnHandler'
-import StateGame from './views/StateGame'
+import StateGameView from './views/StateGameView'
 
 /**
  * Создание и добавление всех фигур
@@ -90,8 +90,8 @@ function createFigures (gameStore: GameStore) {
   //  Cоздание обработчика ходов
   const turnHandler = new TurnHandler(gameStore, net)
 
-  // Состояние игры
-  const stateGame = new StateGame(gameStore)
+  // Создание меню
+  const stateGame = new StateGameView(gameStore)
   app.stage.addChild(stateGame.root)
 
   // Создание доски
