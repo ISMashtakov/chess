@@ -35,15 +35,21 @@ export default class FigureView extends BaseView<FigureStore> {
     this.root.onclick = () => { this.onClick.send(undefined) }
 
     this.store.isSelected.subscribe(this, () => { this.updateSprite() })
-    this.store.position.subscribe(this, e => { this.moveTo(e) })
+    this.store.lastVisiblePosition.subscribe(this, e => { this.updateVisiblePos(e) })
   }
 
   /**
-   * Передвигает фигуру на указанную клетку
+   * Передвигает представление фигуры на указанную клетку.
+   * Если фигура невидимая (позиция для отрисовки не определена), то скрываем её.
    * @param position абсолютная позиция клетки
    */
-  moveTo (position: Vector2) {
-    this.x = position.x * CELL_SIZE
-    this.y = position.y * CELL_SIZE
+  updateVisiblePos (position: Vector2 | undefined) {
+    if (position) {
+      this.root.visible = true
+      this.x = position.x * CELL_SIZE
+      this.y = position.y * CELL_SIZE
+    } else {
+      this.root.visible = false
+    }
   }
 }
