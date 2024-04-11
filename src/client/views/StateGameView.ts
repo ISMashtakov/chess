@@ -26,7 +26,7 @@ export default class StateGameView extends BaseView<GameStore> {
     menu.stroke({ width: 4, color: '#fff' })
     menu.fill('#1099bb')
 
-    this.stateGame = new Text(this.getText(), style)
+    this.stateGame = new Text({ text: this.getText(), style })
     this.stateGame.x = 5
     this.stateGame.y = 5
     menu.addChild(this.stateGame)
